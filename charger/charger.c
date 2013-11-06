@@ -684,7 +684,7 @@ static int draw_text(const char *str, int x, int y)
         x = (gr_fb_width() - str_len_px) / 2;
     if (y < 0)
         y = (gr_fb_height() - char_height) / 2;
-    gr_text(x, y, str/*, 0*/);
+    gr_text(x, y, str, 0);
 
     return y + char_height;
 }
@@ -705,7 +705,7 @@ static void draw_capacity(struct charger *charger)
     x = (gr_fb_width() - str_len_px) / 2;
     y = (gr_fb_height() + char_height) / 2;
     android_green();
-    gr_text(x, y, cap_str/*, 0*/);
+    gr_text(x, y, cap_str, 0);
 }
 
 /* returns the last y-offset of where the surface ends */
@@ -976,6 +976,7 @@ static void handle_input_state(struct charger *charger, int64_t now)
 {
     process_key(charger, KEY_POWER, now);
     process_key(charger, KEY_HOME, now);
+    process_key(charger, KEY_HOMEPAGE, now);
 
     if (charger->next_key_check != -1 && now > charger->next_key_check)
         charger->next_key_check = -1;
