@@ -293,21 +293,15 @@ static int create_subproc_thread(const char *name)
     adb_thread_t t;
     int ret_fd;
     pid_t pid;
-    char value[PROPERTY_VALUE_MAX];
     const char* shell_command;
     struct stat filecheck;
-
-    property_get("persist.sys.adb.shell", value, "");
-    if (value[0] != '\0' && stat(value, &filecheck) == 0) {
-        shell_command = value;
-    }
-    else if (stat(ALTERNATE_SHELL_COMMAND, &filecheck) == 0) {
+    if (stat(ALTERNATE_SHELL_COMMAND, &filecheck) == 0) {
         shell_command = ALTERNATE_SHELL_COMMAND;
     }
     else {
         shell_command = SHELL_COMMAND;
     }
-    
+
     if(name) {
         ret_fd = create_subprocess(shell_command, "-c", name, &pid);
     } else {
@@ -583,15 +577,6 @@ asocket*  host_service_to_socket(const char*  name, const char *serial)
         } else if (!strncmp(name, "any", strlen("any"))) {
             sinfo->transport = kTransportAny;
             sinfo->state = CS_DEVICE;
-        } else if (!strncmp(name, "sideload", strlen("sideload"))) {
-            sinfo->transport = kTransportAny;
-            sinfo->state = CS_SIDELOAD;
-        } else if (!strncmp(name, "recovery", strlen("recovery"))) {
-            sinfo->transport = kTransportAny;
-            sinfo->state = CS_RECOVERY;
-        } else if (!strncmp(name, "online", strlen("online"))) {
-            sinfo->transport = kTransportAny;
-            sinfo->state = CS_ONLINE;
         } else {
             free(sinfo);
             return NULL;
